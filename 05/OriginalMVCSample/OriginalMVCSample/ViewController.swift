@@ -26,13 +26,16 @@ class ViewController: UIViewController {
 	
 }
 
+// ビジネスロジックの塊
+// 自身の変化をDependentsに登録したオブジェクトに通知する役割
 class Model {
 	
 	let notificationCenter = NotificationCenter()
 	
 	private(set) var count = 0 {
 		didSet {
-			notificationCenter.post(name: .init(rawValue: "count"),
+            // 更新を複数のオブジェクトに通知する := SmalltalkのDependentsと同等の機能
+            notificationCenter.post(name: NSNotification.Name(rawValue: "count"),
 									object: nil,
 									userInfo: ["count": count])
 		}
@@ -48,9 +51,11 @@ class Model {
 	
 }
 
+// 入力に関する適切な処理をする
+// 具体的なビジネスロジックはModelオブジェクトへ依頼
 class Controller {
 	
-	weak var myModel: Model?
+	weak var myModel: Model?  // 処理の依頼をするために保持
 	
 	required init() {
 		
@@ -66,21 +71,29 @@ class Controller {
 	
 }
 
+// 画面の描画を担当
+// 適切なControllerオブジェクトの選定・Modelオブジェクトの保持もViewの役割
 class View: UIView {
-	
+
+    // MARK: - Properties
+    
 	let label = UILabel()
 	let minusButton = UIButton()
 	let plusButton = UIButton()
 	
+    // 原初MVCではViewがControllerを保持する
+    // COntrollerを継承しているクラスであれば指定できる
 	var defaultControllerClass: Controller.Type = Controller.self
 	private var myController: Controller?
 	
 	var myModel: Model? {
-		didSet { // Controller生成と、Model監視を開始する
+		didSet { // ViewにModelがセットされタイミングで、Controller生成と、Model監視を開始する
 			registerModel()
 		}
 	}
 	
+    // MARK: - Lifecycles
+        
 	deinit {
 		myModel?.notificationCenter.removeObserver(self)
 	}
@@ -95,6 +108,8 @@ class View: UIView {
 		return nil
 	}
 	
+    // MARK: - Helpers
+    
 	private func setSubviews() {
 		
 		addSubview(label)
@@ -137,7 +152,7 @@ class View: UIView {
 	private func registerModel() {
 		
 		guard let model = myModel else { return }
-		
+        
 		let controller = defaultControllerClass.init()
 		controller.myModel = model
 		myController = controller
@@ -147,6 +162,7 @@ class View: UIView {
 		minusButton.addTarget(controller, action: #selector(Controller.onMinusTapped), for: .touchUpInside)
 		plusButton.addTarget(controller, action: #selector(Controller.onPlusTapped), for: .touchUpInside)
 		
+        // Modelの監視を始める
 		model.notificationCenter.addObserver(forName: .init(rawValue: "count"),
 											 object: nil,
 											 queue: nil,
