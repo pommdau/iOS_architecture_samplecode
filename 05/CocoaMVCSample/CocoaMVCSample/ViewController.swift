@@ -8,6 +8,7 @@
 
 import UIKit
 
+// MediatorパターンでViewとModelのかけや試薬を担当する
 class ViewController: UIViewController {
 	
 	var myModel: Model? {
@@ -56,6 +57,7 @@ class ViewController: UIViewController {
 	
 }
 
+// Modelは原初MVCと変わりなし
 class Model {
 	
 	let notificationCenter = NotificationCenter()
@@ -78,6 +80,9 @@ class Model {
 	
 }
 
+// ViewはViewのことのみを担当する
+// ViewはModelのことを一切知らない
+// 再利用性が高い
 class View: UIView {
 	
 	let label = UILabel()
