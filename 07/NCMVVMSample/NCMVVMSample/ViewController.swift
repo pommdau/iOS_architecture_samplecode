@@ -19,7 +19,7 @@ final class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         idTextField.addTarget(
             self,
             action: #selector(textFieldEditingChanged),
@@ -28,7 +28,8 @@ final class ViewController: UIViewController {
             self,
             action: #selector(textFieldEditingChanged),
             for: .editingChanged)
-
+        
+        // ViewModelからViewへの通知
         notificationCenter.addObserver(
             self,
             selector: #selector(updateValidationText),
@@ -45,12 +46,14 @@ final class ViewController: UIViewController {
 
 extension ViewController {
     @objc func textFieldEditingChanged(sender: UITextField) {
+        // ViewModelの責務であるプレゼンテーションロジックのため、入力をViewからViewModelへ伝搬させる
         viewModel.idPasswordChanged(
             id: idTextField.text,
             password: passwordTextField.text)
     }
 
     @objc func updateValidationText(notification: Notification) {
+        // Notification Centerを使う場合はデータの型情報が失われるという弱点がある
         guard let text = notification.object as? String else { return }
         validationLabel.text = text
     }

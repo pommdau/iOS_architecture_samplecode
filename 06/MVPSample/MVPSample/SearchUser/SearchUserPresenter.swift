@@ -16,6 +16,8 @@ protocol SearchUserPresenterInput {
     func didTapSearchButton(text: String?)
 }
 
+// PresenterがViewに対して描画指示するためのインターフェース
+// 今回でいうとViewのSearchUserViewControllerが対応
 protocol SearchUserPresenterOutput: AnyObject {
     func updateUsers(_ users: [User])
     func transitionToUserDetail(userName: String)
@@ -40,12 +42,16 @@ final class SearchUserPresenter: SearchUserPresenterInput {
         guard row < users.count else { return nil }
         return users[row]
     }
-
+    
+    // プレゼンテーションロジックを処理する
+    // Viewから呼び出されるメソッド
     func didSelectRow(at indexPath: IndexPath) {
         guard let user = user(forRow: indexPath.row) else { return }
         view.transitionToUserDetail(userName: user.login)
     }
 
+    // プレゼンテーションロジックを処理する
+    // Viewから呼び出されるメソッド
     func didTapSearchButton(text: String?) {
         guard let query = text else { return }
         guard !query.isEmpty else { return }

@@ -14,6 +14,8 @@ final class ViewModel {
 
     private let notificationCenter: NotificationCenter
     private let model: ModelProtocol
+    
+    // 本来はViewに表示するためのデータをViewModel側で保持する。今回は該当なし。
 
     init(notificationCenter: NotificationCenter, model: ModelProtocol = Model()) {
         self.notificationCenter = notificationCenter
@@ -21,6 +23,8 @@ final class ViewModel {
     }
 
     func idPasswordChanged(id: String?, password: String?) {
+        // ValidationはModelの責務？ドメインロジックだからか。
+        // Model(=ドメインロジック)と関係ない表示上のデータ加工であれば、ViewModelの内部で処理してもOK
         let result = model.validate(idText: id, passwordText: password)
         
         switch result {

@@ -12,7 +12,11 @@ protocol SearchUserModelInput {
         completion: @escaping (Result<[User]>) -> ())
 }
 
+// Model
+// プレゼンテーションロジック以外の、ドメインロジックを担当
+
 final class SearchUserModel: SearchUserModelInput {
+    // 通信結果に応じて返却する値を振り分けるロジック
     func fetchUser(
         query: String,
         completion: @escaping (Result<[User]>) -> ()) {

@@ -31,11 +31,17 @@ final class SearchUserViewController: UIViewController {
     }
 }
 
+// MARK: - UISearchBarDelegate
+
+// ユーザ入力をPresenterに伝える
+// 入力値に関するロジックはViewに持たない
 extension SearchUserViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         presenter.didTapSearchButton(text: searchBar.text)
     }
 }
+
+// MARK: - UITableViewDelegate
 
 extension SearchUserViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView,
@@ -44,6 +50,8 @@ extension SearchUserViewController: UITableViewDelegate {
         presenter.didSelectRow(at: indexPath)
     }
 }
+
+// MARK: - UITableViewDataSource
 
 extension SearchUserViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView,
@@ -63,11 +71,15 @@ extension SearchUserViewController: UITableViewDataSource {
     }
 }
 
+// MARK: - SearchUserPresenterOutput
+
+// protocol extensionで画面の描画処理を実装
+// Viewを受け身にする
 extension SearchUserViewController: SearchUserPresenterOutput {
     func updateUsers(_ users: [User]) {
         tableView.reloadData()
     }
-
+    
     func transitionToUserDetail(userName: String) {
         let userDetailVC = UIStoryboard(
             name: "UserDetail",
