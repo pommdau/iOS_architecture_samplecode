@@ -9,16 +9,23 @@
 import GitHub
 
 final class SearchRepositoryStore: Store {
+    // SearchRepositoryStoreは1つしか存在しないのでシングルトン
     static let shared = SearchRepositoryStore(dispatcher: .shared)
 
+    // MARK: - Properties
+        
     private(set) var query: String?
     private(set) var pagination: GitHub.Pagination?
     private(set) var isSearchFieldEditing = false
     private(set) var isFetching = false
     private(set) var error: Error?
 
-    private(set) var repositories: [GitHub.Repository] = []
-
+    private(set) var repositories: [GitHub.Repository] = []  // Store内でのみ変更可能
+    
+    // MARK: - Overrides
+    
+    // Dispatcherから受け取ったActionに関する処理の実装
+    // Dispatcherから受け取ったActionでのみStoreの状態が変更できる
     override func onDispatch(_ action: Action) {
         switch action {
         case let .searchRepositories(repositories):

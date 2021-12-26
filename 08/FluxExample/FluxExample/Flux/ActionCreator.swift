@@ -10,8 +10,10 @@ import GitHub
 
 final class ActionCreator {
     
+    // DispatcherとAPIクライアントを持つ
     private let dispatcher: Dispatcher
     private let apiSession: GitHubApiRequestable
+    
     private let localCache: LocalCacheable
 
     init(dispatcher: Dispatcher = .shared,
@@ -29,6 +31,8 @@ extension ActionCreator {
     func searchRepositories(query: String, page: Int = 1) {
         dispatcher.dispatch(.searchQuery(query))
         dispatcher.dispatch(.isRepositoriesFetching(true))
+        
+        // APIクライアントを使用してリポジトリの検索のリクエストを行う
         apiSession.searchRepositories(query: query, page: page) { [dispatcher] result in
             switch result {
             case let .success((repositories, pagination)):
