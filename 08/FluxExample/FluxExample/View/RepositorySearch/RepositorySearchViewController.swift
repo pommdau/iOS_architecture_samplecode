@@ -10,17 +10,24 @@ import UIKit
 
 final class RepositorySearchViewController: UIViewController {
 
+    // MARK: - Properties
+        
     @IBOutlet private(set) weak var tableView: UITableView!
     @IBOutlet private(set) weak var searchBar: UISearchBar!
-
+    
+    // ViewがStoreを持つ: SearchRepositoryStoreとSelectedRepositoryStore
     private let searchStore: SearchRepositoryStore
     private let selectedStore: SelectedRepositoryStore
+    
     private let actionCreator: ActionCreator
     private let dataSource: RepositorySearchDataSource
 
     private let debounce = DispatchQueue.main.debounce(delay: .milliseconds(300))
 
     private lazy var reloadSubscription: Subscription = {
+        // SearchRepositoryStoreのaddListenerで変更を監視している
+        // -> Storeが更新されるとcallBackが呼び出される
+        // -> callBackではUITableViewの更新を行う(リポジトリの一覧が画面に反映される)
         return searchStore.addListener { [weak self] in
             self?.debounce {
                 self?.tableView.reloadData()
@@ -29,6 +36,8 @@ final class RepositorySearchViewController: UIViewController {
         }
     }()
 
+    // MARK: - Lifecycles
+    
     deinit {
         searchStore.removeListener(reloadSubscription)
     }
@@ -58,7 +67,9 @@ final class RepositorySearchViewController: UIViewController {
 
         _ = reloadSubscription
     }
-
+    
+    // MARK: - Helpers
+    
     private func refrectEditing() {
         UIView.animate(withDuration: 0.3) {
             if self.searchStore.isSearchFieldEditing {
@@ -77,6 +88,8 @@ final class RepositorySearchViewController: UIViewController {
     }
 }
 
+// MARK: - UISearchBarDelegate
+
 extension RepositorySearchViewController: UISearchBarDelegate {
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
         actionCreator.setIsSearchFieldEditing(true)
@@ -89,8 +102,8 @@ extension RepositorySearchViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let text = searchBar.text, !text.isEmpty {
-            actionCreator.clearRepositories()
-            actionCreator.searchRepositories(query: text)
+            actionCreator.clearRepositories()  // actionCreaterで配列を空にする
+            actionCreator.searchRepositories(query: text)  // リポジトリを検索
             actionCreator.setIsSearchFieldEditing(false)
         }
     }
