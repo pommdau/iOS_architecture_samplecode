@@ -51,7 +51,7 @@ extension RepositorySearchDataSource: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         let repository = searchStore.repositories[indexPath.row]
-        actionCreator.setSelectedRepository(repository)
+        actionCreator.setSelectedRepository(repository)  // ActionCreatorによって、ActionをDispatcherに渡す
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

@@ -9,10 +9,12 @@
 import GitHub
 
 final class SelectedRepositoryStore: Store {
+    // SelectedRepositoryStoreは1つしか存在しないのでシングルトン
     static let shared = SelectedRepositoryStore(dispatcher: .shared)
 
     private(set) var repository: GitHub.Repository?
-
+    
+    // ActionをDispatcherから受け取った場合…self.repositoryを更新
     override func onDispatch(_ action: Action) {
         switch action {
         case let .selectedRepository(repository):

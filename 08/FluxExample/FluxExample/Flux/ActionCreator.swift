@@ -78,6 +78,7 @@ extension ActionCreator {
 // MARK: - Others
 
 extension ActionCreator {
+    // ActionをDispatcherに渡す
     func setSelectedRepository(_ repository: GitHub.Repository?) {
         dispatcher.dispatch(.selectedRepository(repository))
     }

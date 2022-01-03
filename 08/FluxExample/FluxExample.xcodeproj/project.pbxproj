@@ -181,8 +181,8 @@
 				37C2741B210F70A500F89B82 /* ActionCreator.swift */,
 				37C2741F210F730300F89B82 /* Store.swift */,
 				37E3DBAE214D73C7003B923B /* SearchRepositoryStore.swift */,
-				37E3DBB0214D77FF003B923B /* FavoriteRepositoryStore.swift */,
 				37E3DBB2214D78A2003B923B /* SelectedRepositoryStore.swift */,
+				37E3DBB0214D77FF003B923B /* FavoriteRepositoryStore.swift */,
 			);
 			path = Flux;
 			sourceTree = "<group>";
