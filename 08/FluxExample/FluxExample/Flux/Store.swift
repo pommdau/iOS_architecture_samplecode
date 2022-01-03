@@ -18,7 +18,9 @@ class Store {
     private enum NotificationName {
         static let storeChanged = Notification.Name("store-changed")
     }
-
+    
+    // StoreはDispatcherを持つ
+    // そのDispatcherに対してcallbackを登録
     private lazy var dispatchToken: DispatchToken = {
         // callbackを登録
         return dispatcher.register(callback: { [weak self] action in
@@ -57,6 +59,7 @@ class Store {
 
     // ViewがStoreの変更を監視するためのもの
     final func addListener(callback: @escaping () -> ()) -> Subscription {
+        // Notificationを受けとった際、引数のcallbackが呼び出されるちょうにする
         let using: (Notification) -> () = { notification in
             if notification.name == NotificationName.storeChanged {
                 callback()

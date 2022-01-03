@@ -29,6 +29,7 @@ final class ActionCreator {
 
 extension ActionCreator {
     func searchRepositories(query: String, page: Int = 1) {
+        // ActionCreaterを通してDispatcherにActionを伝える
         dispatcher.dispatch(.searchQuery(query))
         dispatcher.dispatch(.isRepositoriesFetching(true))
         

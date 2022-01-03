@@ -15,13 +15,15 @@ final class RepositorySearchViewController: UIViewController {
     @IBOutlet private(set) weak var tableView: UITableView!
     @IBOutlet private(set) weak var searchBar: UISearchBar!
     
-    // ViewがStoreを持つ: SearchRepositoryStoreとSelectedRepositoryStore
+    // ViewがStoreを持つ: SearchRepositoryStore / SelectedRepositoryStore
     private let searchStore: SearchRepositoryStore
     private let selectedStore: SelectedRepositoryStore
     
+    // // ViewがActionCreater持つ
     private let actionCreator: ActionCreator
+    
     private let dataSource: RepositorySearchDataSource
-
+    
     private let debounce = DispatchQueue.main.debounce(delay: .milliseconds(300))
 
     private lazy var reloadSubscription: Subscription = {

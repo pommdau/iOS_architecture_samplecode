@@ -20,7 +20,7 @@ final class SearchRepositoryStore: Store {
     private(set) var isFetching = false
     private(set) var error: Error?
 
-    private(set) var repositories: [GitHub.Repository] = []  // Store内でのみ変更可能
+    private(set) var repositories: [GitHub.Repository] = []  // リポジトリ一覧の配列。Store内でのみ変更可能。
     
     // MARK: - Overrides
     
@@ -54,7 +54,7 @@ final class SearchRepositoryStore: Store {
             return
 
         }
-        emitChange()
+        emitChange()  // Storeの変更をViewへ送信
     }
 }
 

@@ -12,10 +12,14 @@ import Foundation
 typealias DispatchToken = String
 
 final class Dispatcher {
-
-    static let shared = Dispatcher()  // Dispatcherは1つのコンテキストに応じて1つだけ存在する。そのためシングルトン。
+    
+    // Dispatcherは1つのコンテキストに応じて1つだけ存在する。そのためシングルトン。
+    // ActionCreatorやStoreから利用する場合はこのsharedを利用
+    static let shared = Dispatcher()
 
     let lock: NSLocking
+    
+    // callbackは、DispatchToken(=String)型をキー、closureの(Action) -> ()をバリューとしたDictionary^型
     private var callbacks: [DispatchToken: (Action) -> ()]
 
     init() {
@@ -24,12 +28,12 @@ final class Dispatcher {
     }
     
     
-    // Storeから呼び出される
+    // Storeから呼び出されcallbackを登録する
     func register(callback: @escaping (Action) -> ()) -> DispatchToken {
         lock.lock(); defer { lock.unlock() }
 
         let token =  UUID().uuidString
-        callbacks[token] = callback
+        callbacks[token] = callback  // ユニークな文字列をキーとしてcallbackを登録
         return token
     }
 
