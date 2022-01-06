@@ -19,6 +19,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     private let selectedStore = SelectedRepositoryStore.shared
 
     private lazy var showRepositoryDetailSubscription: Subscription = {
+        // SelectedRepositoryStoreの変更を監視
         return selectedStore.addListener { [weak self] in
             DispatchQueue.main.async {
                 guard
@@ -29,6 +30,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 else {
                     return
                 }
+                // URLが見つかれば画面を遷移させる
                 let vc = RepositoryDetailViewController()
                 navigationController.pushViewController(vc, animated: true)
             }

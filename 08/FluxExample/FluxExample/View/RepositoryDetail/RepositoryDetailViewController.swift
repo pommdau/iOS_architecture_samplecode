@@ -10,7 +10,9 @@ import UIKit
 import WebKit
 
 final class RepositoryDetailViewController: UIViewController {
-
+    
+    // MARK: - Properties
+    
     @IBOutlet private weak var progressView: UIProgressView!
     @IBOutlet private weak var webviewContainer: UIView! {
         didSet {
@@ -38,7 +40,7 @@ final class RepositoryDetailViewController: UIViewController {
                                                       target: self,
                                                       action: #selector(self.favoriteButtonTap(_:)))
 
-    private let selectedStore: SelectedRepositoryStore
+    private let selectedStore: SelectedRepositoryStore  // Viewでは状態を保持せず、Storeの状態を画面に反映させる
     private let favoriteStore: FavoriteRepositoryStore
     private let actionCreator: ActionCreator
 
@@ -68,6 +70,8 @@ final class RepositoryDetailViewController: UIViewController {
             $0.id == selectedStore.repository?.id
         }
     }
+    
+    // MARK: - Lifecycles
 
     deinit {
         actionCreator.setSelectedRepository(nil)
@@ -106,6 +110,8 @@ final class RepositoryDetailViewController: UIViewController {
 
         webview.load(URLRequest(url: repository.htmlURL))
     }
+    
+    // MARK: - Helpers
 
     private func updateFavoriteButton() {
         favoriteButton.title = isFavorite ? "🌟 Unstar" : "⭐️ Star"
