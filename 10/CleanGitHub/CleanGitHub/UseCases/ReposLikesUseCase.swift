@@ -9,6 +9,8 @@
 import Foundation
 
 // Use Caseが外側(Interface Adapters)に公開するインターフェイス
+// InputはPresenterからの入力を受け付ける
+// UseCaseは必要な情報をGateway越しに取得
 protocol ReposLikesUseCaseProtocol: AnyObject {
     // キーワードを使ったサーチ
     func startFetch(using keywords: [String])

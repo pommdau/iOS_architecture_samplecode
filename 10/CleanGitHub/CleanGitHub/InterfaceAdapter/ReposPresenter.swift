@@ -48,7 +48,7 @@ protocol LikesPresenterOutput {
 class ReposPresenter: ReposPresenterProtocol, ReposLikesUseCaseOutput {
 
     private weak var useCase: ReposLikesUseCaseProtocol!
-    var reposOutput: ReposPresenterOutput?
+    var reposOutput: ReposPresenterOutput?  // ReposPresenterOutputに準拠したUIのオブジェクト(今回はUITableViewController)を保持
     var likesOutput: LikesPresenterOutput?
 
     init(useCase: ReposLikesUseCaseProtocol) {
